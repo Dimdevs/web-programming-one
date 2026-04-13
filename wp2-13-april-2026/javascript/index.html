@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Javascript Tutorial</title>
+  </head>
+  <body>
+    <h1 class="title"></h1>
+
+    <button onclick="showMessage()">Click Me!</button>
+
+    <script type="text/javascript">
+      var titleElement = document.querySelector(".title");
+      titleElement.textContent = "Welcome to JavaScript!";
+        
+      function showMessage() {
+        alert("Hello, this is a message from JavaScript!");
+      }
+    </script>
+  </body>
+</html>

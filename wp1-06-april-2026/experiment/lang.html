@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Language System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+        }
+
+        .form-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button.submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button.submit-btn:hover {
+            background: #764ba2;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            color: #555;
+        }
+
+        .data-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .data-item {
+            background: white;
+            border-left: 3px solid #764ba2;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-item-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .data-item-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .data-item-email {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .data-item-message {
+            color: #555;
+            font-size: 14px;
+            margin-top: 8px;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 3px;
+            word-break: break-word;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .delete-btn:hover {
+            background: #ee5a52;
+        }
+
+        .empty-message {
+            color: #999;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .clear-btn {
+            background: #ff6b6b;
+        }
+
+        .clear-btn:hover {
+            background: #ee5a52;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Language Selector -->
+        <div class="language-selector">
+            <button class="lang-btn active" data-lang="en">English</button>
+            <button class="lang-btn" data-lang="id">Bahasa Indonesia</button>
+        </div>
+
+        <!-- Content -->
+        <h1 data-key="title">Welcome</h1>
+        
+        <div class="content">
+            <p data-key="greeting">Hello! This is a dynamic language system.</p>
+            <p data-key="description">You can easily switch between languages by clicking the buttons above. All text will update instantly.</p>
+            <p data-key="feature">This system uses simple JavaScript to change the language dynamically.</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <h2 data-key="form_title">Contact Form</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name" data-key="label_name">Name</label>
+                    <input type="text" id="name" placeholder="" data-placeholder="label_name">
+                </div>
+                <div class="form-group">
+                    <label for="email" data-key="label_email">Email</label>
+                    <input type="email" id="email" placeholder="" data-placeholder="label_email">
+                </div>
+                <div class="form-group">
+                    <label for="message" data-key="label_message">Message</label>
+                    <textarea id="message" data-placeholder="label_message"></textarea>
+                </div>
+                <button type="button" class="submit-btn" data-key="btn_submit">Submit</button>
+            </form>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box" data-key="info_text">
+            This is a simple translation system that stores all text in a JavaScript object.
+        </div>
+
+        <!-- Data Storage Section -->
+        <div class="form-section">
+            <h2 data-key="saved_data_title">Saved Messages</h2>
+            <div id="data-list" class="data-list"></div>
+            <button type="button" class="submit-btn clear-btn" data-key="clear_data_btn">Clear All Data</button>
+        </div>
+    </div>
+
+    <script>
+        // Object untuk menyimpan semua terjemahan
+        const translations = {
+            en: {
+                title: "Welcome to Language Switcher",
+                greeting: "Hello! This is a dynamic language system.",
+                description: "You can easily switch between languages by clicking the buttons above. All text will update instantly.",
+                feature: "This system uses simple JavaScript to change the language dynamically without reloading the page.",
+                form_title: "Contact Form",
+                label_name: "Your Full Name",
+                label_email: "Your Email Address",
+                label_message: "Your Message",
+                btn_submit: "Send Message",
+                info_text: "💡 Tip: This is a simple translation system that stores all text in a JavaScript object. You can easily add more languages by adding new keys to the translations object.",
+                saved_data_title: "Saved Messages",
+                clear_data_btn: "Clear All Data",
+                empty_data: "No messages saved yet.",
+                no_data_message: "Belum ada pesan yang disimpan."
+            },
+            id: {
+                title: "Selamat Datang di Pengalih Bahasa",
+                greeting: "Halo! Ini adalah sistem bahasa dinamis.",
+                description: "Anda dapat dengan mudah beralih antar bahasa dengan mengklik tombol di atas. Semua teks akan diperbarui secara instan.",
+                feature: "Sistem ini menggunakan JavaScript sederhana untuk mengubah bahasa secara dinamis tanpa memuat ulang halaman.",
+                form_title: "Formulir Kontak",
+                label_name: "Nama Lengkap Anda",
+                label_email: "Alamat Email Anda",
+                label_message: "Pesan Anda",
+                btn_submit: "Kirim Pesan",
+                info_text: "💡 Tips: Ini adalah sistem terjemahan sederhana yang menyimpan semua teks dalam objek JavaScript. Anda dapat dengan mudah menambahkan lebih banyak bahasa dengan menambahkan kunci baru ke objek terjemahan.",
+                saved_data_title: "Pesan Tersimpan",
+                clear_data_btn: "Hapus Semua Data",
+                empty_data: "Belum ada pesan yang disimpan."
+            }
+        };
+
+        // Bahasa default
+        let currentLanguage = 'en';
+
+        // Fungsi untuk mengubah bahasa
+        function setLanguage(lang) {
+            currentLanguage = lang;
+
+            // Update semua elemen dengan atribut data-key
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Update placeholder di input fields
+            document.querySelectorAll('[data-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-placeholder');
+                if (translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+
+            // Update button aktif
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Simpan preferensi bahasa ke localStorage
+            localStorage.setItem('preferred-language', lang);
+        }
+
+        // Event listener untuk tombol bahasa
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                setLanguage(lang);
+            });
+        });
+
+        // Muat bahasa yang disimpan saat halaman pertama kali dibuka
+        const savedLanguage = localStorage.getItem('preferred-language') || 'en';
+        setLanguage(savedLanguage);
+
+        // ========== FUNGSI UNTUK MENYIMPAN DATA ==========
+        
+        // Fungsi untuk menyimpan data form
+        function saveFormData(name, email, message) {
+            // Ambil data yang sudah ada di localStorage
+            let savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
+            
+            // Tambah data baru
+            const newMessage = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                message: message,
+                timestamp: new Date().toLocaleString(),
+                language: currentLanguage
+            };
+            
+            savedMessages.push(newMessage);
+            
+            // Simpan kembali ke localStorage
+            localStorage.setItem('messages', JSON.stringify(savedMessages));
+            
+            console.log('Data saved:', newMessage);
+            return newMessage;
+        }
+
+        // Fungsi untuk menampilkan data yang tersimpan
+        function displaySavedData() {
+            const savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
+            const dataList = document.getElementById('data-list');
+            
+            if (savedMessages.length === 0) {
+                dataList.innerHTML = `<div class="empty-message">${translations[currentLanguage].empty_data}</div>`;
+                return;
+            }
+            
+            dataList.innerHTML = savedMessages.map(msg => `
+                <div class="data-item">
+                    <div class="data-item-date">📅 ${msg.timestamp}</div>
+                    <div class="data-item-name">👤 ${msg.name}</div>
+                    <div class="data-item-email">📧 ${msg.email}</div>
+                    <div class="data-item-message">💬 ${msg.message}</div>
+                    <button type="button" class="delete-btn" onclick="deleteMessage(${msg.id})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        // Fungsi untuk menghapus satu data
+        function deleteMessage(id) {
+            let savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
+            savedMessages = savedMessages.filter(msg => msg.id !== id);
+            localStorage.setItem('messages', JSON.stringify(savedMessages));
+            displaySavedData();
+        }
+
+        // Fungsi untuk menghapus semua data
+        function clearAllData() {
+            if (confirm(currentLanguage === 'en' ? 'Are you sure?' : 'Anda yakin?')) {
+                localStorage.removeItem('messages');
+                displaySavedData();
+            }
+        }
+
+        // Event listener untuk tombol submit
+        document.querySelector('.submit-btn').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            if (name && email && message) {
+                // Simpan data ke localStorage
+                saveFormData(name, email, message);
+                
+                const successMsg = currentLanguage === 'en' 
+                    ? `Thank you ${name}! Your message has been sent.`
+                    : `Terima kasih ${name}! Pesan Anda telah dikirim.`;
+                alert(successMsg);
+                
+                // Reset form
+                document.querySelector('form').reset();
+                
+                // Tampilkan data terbaru
+                displaySavedData();
+            } else {
+                const errorMsg = currentLanguage === 'en'
+                    ? 'Please fill in all fields!'
+                    : 'Harap isi semua kolom!';
+                alert(errorMsg);
+            }
+        });
+
+        // Event listener untuk tombol clear data
+        document.querySelector('.clear-btn').addEventListener('click', function() {
+            clearAllData();
+        });
+
+        // Tampilkan data saat halaman dimuat
+        displaySavedData();
+    </script>
+</body>
+</html>
